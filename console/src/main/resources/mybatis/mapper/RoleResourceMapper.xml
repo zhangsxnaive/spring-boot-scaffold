@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chmpay.idauth.console.repository.RoleResourceMapper">
+
+
+    <insert id="insertList" parameterType="collection">
+        insert into tbl_chmpay_role_resource(id, role_id, resource_id, create_time, modify_time, status, remark)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id},#{item.roleId},#{item.resourceId},#{item.createTime},#{item.modifyTime},#{item.status},#{item.remark})
+        </foreach>
+    </insert>
+    <delete id="deleteByResourceIds" parameterType="java.util.Set">
+        delete from tbl_chmpay_role_resource where resource_id in
+        <foreach collection="set" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+
+    </delete>
+    <select id="findByRoleId" resultType="com.chmpay.idauth.console.model.RoleResource">
+        select *
+        from tbl_chmpay_role_resource
+        where role_id = #{id}
+    </select>
+    <select id="findByResourceIdIn" resultType="com.chmpay.idauth.console.model.RoleResource"
+            parameterType="collection">
+        select * from tbl_chmpay_role_resource where resource_id in
+        <foreach collection="set" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

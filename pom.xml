@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.5.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.chmpay</groupId>
+    <artifactId>idauth-Spring Boot</artifactId>
+    <version>1.0.0-sp-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>idauth-Spring Boot</name>
+    <description>实名认证</description>
+
+    <modules>
+        <module>console</module>
+        <module>common</module>
+    </modules>
+    <properties>
+        <java.version>1.8</java.version>
+        <druid.version>1.1.10</druid.version>
+        <!--<version.mysql>5.1.34</version.mysql>-->
+        <version.mysql>8.0.12</version.mysql>
+        <version.quartz>2.1.6</version.quartz>
+        <version.poi>3.12</version.poi>
+        <version.pinyin4j>2.5.0</version.pinyin4j>
+        <version.commons.codec>1.9</version.commons.codec>
+        <version.commons.io>2.0.1</version.commons.io>
+        <version.commons.pool>1.6</version.commons.pool>
+        <version.commons-dbcp>1.4</version.commons-dbcp>
+        <version.commons.httpclient>4.3.3</version.commons.httpclient>
+        <version.commons-configuration>1.10</version.commons-configuration>
+        <version.commons.fileupload>1.2.2</version.commons.fileupload>
+        <version.net.sourceforge.jexcelapi>2.6.12</version.net.sourceforge.jexcelapi>
+        <version.jianzhou>6.0</version.jianzhou>
+        <version.mail>1.4</version.mail>
+        <version.org.bouncycastle>1.51</version.org.bouncycastle>
+        <version.commons.httpclient>4.3.3</version.commons.httpclient>
+        <version.httpmime>4.3.1</version.httpmime>
+        <version.mybatis.plus>3.1.1</version.mybatis.plus>
+        <version.pageHelper>1.2.12</version.pageHelper>
+        <!-- 通用依赖 -->
+        <version.commons-lang>2.6</version.commons-lang>
+        <version.fastjson>1.1.23</version.fastjson>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- 通用依赖 -->
+        <!-- Spring Boot WEB模块 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- Apache Commons -->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>${version.commons-lang}</version>
+        </dependency>
+        <!-- fastJson -->
+        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${version.fastjson}</version>
+        </dependency>
+    </dependencies>
+
+    <!-- 统一子项目jar包版本号，只声明依赖，子项目不会自动继承。
+    只有在子项目中写了该依赖项，并且没有指定具体版本，才会从父项目中继承该项，
+    并且version和scope都读取自父pom;另外如果子项目中指定了版本号，那么会使用子项目中指定的jar版本。 -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- Druid 数据连接池依赖 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+
+            <!-- Mybatis Plus -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${version.mybatis.plus}</version>
+            </dependency>
+            <!-- PageHelper 会自动集成mybatis starter及其他东西-->
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <version>${version.pageHelper}</version>
+            </dependency>
+            <!-- 融信依赖 -->
+            <dependency>
+                <groupId>com.chmpay.pcard</groupId>
+                <artifactId>chmpay-mail</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.chmpay.pcard</groupId>
+                <artifactId>chmpay-util</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
+            <!-- mysql连接 -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${version.mysql}</version>
+            </dependency>
+
+            <!-- pinyin4j -->
+            <dependency>
+                <groupId>com.belerweb</groupId>
+                <artifactId>pinyin4j</artifactId>
+                <version>${version.pinyin4j}</version>
+            </dependency>
+
+            <!-- quartz定时任务 -->
+            <dependency>
+                <groupId>org.quartz-scheduler</groupId>
+                <artifactId>quartz</artifactId>
+                <version>${version.quartz}</version>
+            </dependency>
+
+            <!-- POI -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${version.poi}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${version.poi}</version>
+            </dependency>
+
+            <!-- jxl -->
+            <dependency>
+                <groupId>net.sourceforge.jexcelapi</groupId>
+                <artifactId>jxl</artifactId>
+                <version>${version.net.sourceforge.jexcelapi}</version>
+            </dependency>
+
+            <!--pay-->
+            <dependency>
+                <groupId>com.alipay.sdk</groupId>
+                <artifactId>alipay-sdk-java</artifactId>
+                <version>3.1.0</version>
+            </dependency>
+            <!--end-->
+
+            <!-- Apache Commons -->
+            <dependency>
+                <groupId>commons-configuration</groupId>
+                <artifactId>commons-configuration</artifactId>
+                <version>${version.commons-configuration}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${version.commons.codec}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-pool</groupId>
+                <artifactId>commons-pool</artifactId>
+                <version>${version.commons.pool}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${version.commons.io}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-dbcp</groupId>
+                <artifactId>commons-dbcp</artifactId>
+                <version>${version.commons-dbcp}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>${version.commons.fileupload}</version>
+            </dependency>
+
+            <!-- 建州短信验证码 -->
+            <dependency>
+                <groupId>com.jianzhou</groupId>
+                <artifactId>sdk</artifactId>
+                <version>${version.jianzhou}</version>
+            </dependency>
+
+            <!-- java mail -->
+            <dependency>
+                <groupId>javax.mail</groupId>
+                <artifactId>mail</artifactId>
+                <version>${version.mail}</version>
+            </dependency>
+
+            <!-- jce -->
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk15on</artifactId>
+                <version>${version.org.bouncycastle}</version>
+            </dependency>
+
+            <!-- http client -->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${version.commons.httpclient}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpmime</artifactId>
+                <version>${version.httpmime}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>nexus-public</id>
+            <name>Public Repositories</name>
+            <url>http://172.18.0.84:8081/nexus/content/repositories/public/</url>
+        </repository>
+        <repository>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>nexus-releases</id>
+            <name>Public Repositories</name>
+            <url>http://172.18.0.84:8081/nexus/content/repositories/releases/</url>
+        </repository>
+
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>nexus-public</id>
+            <name>Public Repositories</name>
+            <url>http://172.18.0.84:8081/nexus/content/repositories/public/</url>
+        </pluginRepository>
+    </pluginRepositories>
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <name>Nexus Releases Repository</name>
+            <url>http://172.18.0.84:8081/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <name>Nexus Snapshot Repository</name>
+            <url>http://172.18.0.84:8081/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+</project>

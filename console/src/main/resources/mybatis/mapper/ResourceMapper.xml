@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chmpay.idauth.console.repository.ResourceMapper">
+
+
+    <insert id="insertList" parameterType="collection">
+        insert into tbl_chmpay_resource(id, resource_code, resource_name, resource_url, resource_icon, resource_use,
+        menu_id, create_time, modify_time, status, remark)
+        VALUES
+        <foreach collection="list" index="index" item="item" separator=",">
+            (#{item.id},#{item.resourceCode},#{item.resourceName},#{item.resourceUrl},#{item.resourceIcon},
+            #{item.resourceUse},#{item.menuId},#{item.createTime},#{item.modifyTime},#{item.status},#{item.remark})
+        </foreach>
+
+
+    </insert>
+    <update id="update" parameterType="com.chmpay.idauth.console.model.Resource">
+        update tbl_chmpay_resource
+        <set>
+            <if test="resourceName != null">
+                menu_icon = #{resourceName},
+            </if>
+            <if test="resourceUrl != null">
+                menu_name = #{resourceUrl},
+            </if>
+            <if test="resourceIcon != null">
+                menu_url = #{resourceIcon}
+            </if>
+            <if test="resourceUse != null">
+                menu_url = #{resourceUse}
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+            <if test="status != null">
+                `status` = #{status}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <select id="selectListByRoleId" resultType="com.chmpay.idauth.console.model.Resource">
+        select r.*
+        from tbl_chmpay_resource r,
+             tbl_chmpay_role_resource rr
+        where r.id = rr.resource_id
+          and rr.role_id = #{roleId}
+    </select>
+    <select id="findByMenuId" resultType="com.chmpay.idauth.console.model.Resource">
+        select *
+        from tbl_chmpay_resource
+        where menu_id = #{id}
+    </select>
+    <!--
+    private String id;
+    private String resourcename;
+    private String status;
+    private String menuname;
+    private String resourceurl;
+    private String resourceuse;
+    private String resourceicon;
+    private Date createtime;
+    private Date modifytime;
+    -->
+    <select id="queryResourceService" resultType="com.chmpay.idauth.console.vo.ResourceVo">
+
+        select r.id as id,
+        r.resource_name as resourcename,
+        r.status as status,
+        m.menu_name as menuname,
+        r.resource_url as resourceurl,
+        r.resource_use as resourceuse,
+        r.resource_icon as resourceicon,
+        r.create_time as createtime,
+        r.modify_time as modifytime
+        from tbl_chmpay_resource as r
+        left join tbl_chmpay_menu as m on r.menu_id = m.id
+        <where>
+            <if test="params.containsKey('resourceName')">
+                and r.resource_name=#{params.resourceName}
+            </if>
+            <if test="params.containsKey('menuId')">
+                and m.id=#{params.menuId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

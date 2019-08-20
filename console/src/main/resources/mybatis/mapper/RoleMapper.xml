@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chmpay.idauth.console.repository.RoleMapper">
+
+    <resultMap id="roleResourceMenu" type="com.chmpay.idauth.console.vo.FirstClsssMenu">
+        <!--<collection property="menus" ofType="com.chmpay.idauth.console.vo.FirstClsssMenu">-->
+        <id column="p_menu_id" property="id"/>
+        <result column="p_menu_code" property="menuCode"/>
+        <result column="p_menu_name" property="menuName"/>
+        <result column="p_menu_url" property="menuUrl"/>
+        <result column="p_menu_icon" property="menuIcon"/>
+        <result column="p_prent_id" property="parentId"/>
+        <result column="p_status" property="status"/>
+        <result column="p_remark" property="remark"/>
+        <result column="p_order" property="order"/>
+        <collection resultMap="childMenu" property="children"/>
+        <!--</collection>-->
+    </resultMap>
+
+    <resultMap id="childMenu" type="com.chmpay.idauth.console.vo.SecondClassMenu">
+        <id column="c_menu_id" property="id"/>
+        <result column="c_menu_code" property="menuCode"/>
+        <result column="c_menu_name" property="menuName"/>
+        <result column="c_menu_url" property="menuUrl"/>
+        <result column="c_menu_icon" property="menuIcon"/>
+        <result column="c_prent_id" property="parentId"/>
+        <result column="c_status" property="status"/>
+        <result column="c_remark" property="remark"/>
+        <result column="c_order" property="order"/>
+        <collection property="children" ofType="com.chmpay.idauth.console.model.Resource">
+            <id column="r_id" property="id"/>
+            <result column="r_code" property="resourceCode"/>
+            <result column="r_name" property="resourceName"/>
+            <result column="r_url" property="resourceUrl"/>
+            <result column="r_icon" property="resourceIcon"/>
+            <result column="r_use" property="resourceUse"/>
+            <result column="r_menu_id" property="menuId"/>
+            <result column="r_status" property="status"/>
+            <result column="r_remark" property="remark"/>
+        </collection>
+    </resultMap>
+
+
+    <select id="queryRoleService" resultType="com.chmpay.idauth.console.model.Role" parameterType="map">
+        select * from tbl_chmpay_role as r
+        <if test="params.containsKey('userId')">
+            left join tbl_chmpay_user_role as ur on r.id = ur.role_id
+        </if>
+        <where>
+            <if test="params.containsKey('userId')">
+                and ur.user_id = #{params.userId}
+            </if>
+            <if test="params.containsKey('roleName')">
+                and r.role_name like CONCAT('%', #{params.roleName}, '%')
+            </if>
+            <if test="params.containsKey('roleId')">
+                and r.id = #{params.roleId}
+            </if>
+            <if test="params.containsKey('status')">
+                and r.status = #{params.status}
+            </if>
+        </where>
+    </select>
+    <select id="queryRoleResourceService" resultMap="roleResourceMenu" parameterType="map">
+        select
+        resource.id as r_id,
+        resource.resource_code as r_code,
+        resource.resource_name as r_name,
+        resource.resource_url as r_url,
+        resource.resource_icon as r_icon,
+        resource.resource_use as r_use,
+        resource.menu_id as r_menu_id,
+        resource.status as r_status,
+        resource.remark as r_remark,
+        parentMenu.id as p_menu_id,
+        parentMenu.menu_code as p_menu_code,
+        parentMenu.menu_name as p_menu_name,
+        parentMenu.menu_url as p_menu_url,
+        parentMenu.menu_icon as p_menu_icon,
+        parentMenu.`order` as p_order,
+        parentMenu.parent_id as p_prent_id,
+        parentMenu.status as p_status,
+        parentMenu.remark as p_remark,
+        childMenu.id as c_menu_id,
+        childMenu.menu_code as c_menu_code,
+        childMenu.menu_name as c_menu_name,
+        childMenu.menu_url as c_menu_url,
+        childMenu.menu_icon as c_menu_icon,
+        childMenu.`order` as c_order,
+        childMenu.parent_id as c_prent_id,
+        childMenu.status as c_status,
+        childMenu.remark as c_remark
+        from tbl_chmpay_role_resource as roleResource,
+        tbl_chmpay_resource as resource,
+        tbl_chmpay_menu as parentMenu,
+        tbl_chmpay_menu as childMenu
+        where roleResource.resource_id = resource.id
+        and resource.menu_id = childMenu.id
+        and childMenu.parent_id = parentMenu.id
+        and roleResource.status = '0'
+        and resource.status = '0'
+        and parentMenu.status = '0'
+        and childMenu.status = '0'
+        <if test="params.containsKey('roleId')">
+            and roleResource.role_id = #{params.roleId}
+        </if>
+        order by parentMenu.`order` ,childMenu.`order` asc;
+
+    </select>
+
+
+</mapper>
