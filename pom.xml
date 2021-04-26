@@ -28,7 +28,7 @@
         <version.poi>3.12</version.poi>
         <version.pinyin4j>2.5.0</version.pinyin4j>
         <version.commons.codec>1.9</version.commons.codec>
-        <version.commons.io>2.0.1</version.commons.io>
+        <version.commons.io>2.7</version.commons.io>
         <version.commons.pool>1.6</version.commons.pool>
         <version.commons-dbcp>1.4</version.commons-dbcp>
         <version.commons.httpclient>4.3.6</version.commons.httpclient>
