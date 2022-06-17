@@ -44,7 +44,7 @@
         <version.pageHelper>1.2.12</version.pageHelper>
         <!-- 通用依赖 -->
         <version.commons-lang>2.6</version.commons-lang>
-        <version.fastjson> 1.2.31</version.fastjson>
+        <version.fastjson>1.2.83</version.fastjson>
     </properties>
 
     <dependencies>
